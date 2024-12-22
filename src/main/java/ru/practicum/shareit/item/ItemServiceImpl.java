@@ -52,10 +52,10 @@ public class ItemServiceImpl implements ItemService {
             throw new ValidationException("Информация о предмете не может быть пустой");
         }
         if (dto.getName() == null || dto.getName().isBlank()) {
-            throw new ValidationException("Название предмета не может быть пустым");
+            throw new ValidationException(String.format("Название предмета (id=%d) не может быть пустым", dto.getId()));
         }
         if (dto.getOwnerId() == null) {
-            throw new ValidationException("Владелец предмета не может быть пустым");
+            throw new ValidationException(String.format("Владелец предмета (id=%d) не может быть пустым", dto.getId()));
         }
     }
 }

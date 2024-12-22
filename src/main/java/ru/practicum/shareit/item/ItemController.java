@@ -13,6 +13,7 @@ import java.util.List;
 @RequestMapping("/items")
 public class ItemController {
     private final ItemService itemService;
+    private static final String ID_PATH = "/{id}";
     private static final String USER_ID_HEADER = "X-Sharer-User-Id";
 
     /**
@@ -27,7 +28,7 @@ public class ItemController {
     /**
      * Обновить информацию о предмете
      */
-    @PatchMapping("/{id}")
+    @PatchMapping(ID_PATH)
     public ItemDto patchItem(@PathVariable Integer id, @RequestHeader(USER_ID_HEADER) Integer userId, @RequestBody ItemDto item) {
         item.setId(id);
         item.setOwnerId(userId);
@@ -46,7 +47,7 @@ public class ItemController {
     /**
      * Получить информацию о предмете
      */
-    @GetMapping("/{id}")
+    @GetMapping(ID_PATH)
     public ItemDto getItem(@PathVariable Integer id) {
         return itemService.getItem(id);
     }
@@ -54,7 +55,7 @@ public class ItemController {
     /**
      * Удалить предмет
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ID_PATH)
     public void deleteItem(@PathVariable Integer id) {
         itemService.deleteItem(id);
     }

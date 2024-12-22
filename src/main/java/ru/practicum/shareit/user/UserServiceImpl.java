@@ -40,16 +40,16 @@ public class UserServiceImpl implements UserService {
                 throw new ValidationException("Информация о пользователе не может быть пустой");
             }
             if (dto.getName() == null || dto.getName().isBlank()) {
-                throw new ValidationException("Имя пользователя не может быть пустым");
+                throw new ValidationException(String.format("Имя пользователя (id=%d) не может быть пустым", dto.getId()));
             }
             if (dto.getEmail() == null || dto.getEmail().isBlank()) {
-                throw new ValidationException("Email пользователя не может быть пустым");
+                throw new ValidationException(String.format("Email пользователя (id=%d) не может быть пустым", dto.getId()));
             }
         }
 
         // в случае если поле email не пустое, то валидация значения
         if (dto.getEmail() != null && !dto.getEmail().isBlank() && !dto.getEmail().contains("@")) {
-            throw new ValidationException("Email пользователя не удовлетворяет формату");
+            throw new ValidationException(String.format("Email пользователя (id=%d) не удовлетворяет формату", dto.getId()));
         }
     }
 }

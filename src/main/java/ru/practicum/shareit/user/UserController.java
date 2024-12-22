@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private static final String ID_PATH = "/{id}";
 
     /**
      * Создать пользователя
@@ -22,7 +23,7 @@ public class UserController {
     /**
      * Обновить данные пользователя
      */
-    @PatchMapping("/{id}")
+    @PatchMapping(ID_PATH)
     public UserDto patchUser(@PathVariable Integer id, @RequestBody UserDto user) {
         user.setId(id);
         return userService.patchUser(user);
@@ -31,7 +32,7 @@ public class UserController {
     /**
      * Получить данные пользователя
      */
-    @GetMapping("/{id}")
+    @GetMapping(ID_PATH)
     public UserDto getUser(@PathVariable Integer id) {
         return userService.getUser(id);
     }
@@ -39,7 +40,7 @@ public class UserController {
     /**
      * Удалить пользователя
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ID_PATH)
     public void deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
     }
