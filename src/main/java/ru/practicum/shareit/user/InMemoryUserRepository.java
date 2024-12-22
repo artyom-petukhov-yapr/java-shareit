@@ -5,6 +5,7 @@ import ru.practicum.shareit.exception.RepositoryException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Repository
@@ -60,7 +61,7 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     private void userNameUniqueConstraint(User user) {
-        if (users.values().stream().anyMatch(u -> u.getId() != user.getId() && u.getName().equals(user.getName()))) {
+        if (users.values().stream().anyMatch(u -> !Objects.equals(u.getId(), user.getId()) && u.getName().equals(user.getName()))) {
             throw new RepositoryException(String.format("Пользователь с name = %s уже зарегистрирован", user.getName()));
         }
     }
@@ -72,7 +73,7 @@ public class InMemoryUserRepository implements UserRepository {
     }
 
     private void userEmailUniqueConstraint(User user) {
-        if (users.values().stream().anyMatch(u -> u.getId() != user.getId() && u.getEmail().equals(user.getEmail()))) {
+        if (users.values().stream().anyMatch(u -> !Objects.equals(u.getId(), user.getId()) && u.getEmail().equals(user.getEmail()))) {
             throw new RepositoryException(String.format("Пользователь с email = %s уже зарегистрирован", user.getEmail()));
         }
     }
