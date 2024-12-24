@@ -2,6 +2,7 @@ package ru.practicum.shareit.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final ModelMapper modelMapper;
     private static final String ID_PATH = "/{id}";
 
     /**
@@ -17,7 +19,8 @@ public class UserController {
      */
     @PostMapping
     public UserDto createUser(@RequestBody UserDto user) {
-        return userService.createUser(user);
+        User result = userService.createUser(modelMapper.map(user, User.class));
+        return modelMapper.map(result, UserDto.class);
     }
 
     /**
@@ -26,7 +29,8 @@ public class UserController {
     @PatchMapping(ID_PATH)
     public UserDto patchUser(@PathVariable Integer id, @RequestBody UserDto user) {
         user.setId(id);
-        return userService.patchUser(user);
+        User result = userService.patchUser(modelMapper.map(user, User.class));
+        return modelMapper.map(result, UserDto.class);
     }
 
     /**
@@ -34,7 +38,7 @@ public class UserController {
      */
     @GetMapping(ID_PATH)
     public UserDto getUser(@PathVariable Integer id) {
-        return userService.getUser(id);
+        return modelMapper.map(userService.getUser(id), UserDto.class);
     }
 
     /**
