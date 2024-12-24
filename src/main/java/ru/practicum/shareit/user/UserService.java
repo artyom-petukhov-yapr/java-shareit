@@ -1,11 +1,11 @@
 package ru.practicum.shareit.user;
 
 public interface UserService {
-    UserDto getUser(Integer id);
+    User getUser(Integer id);
 
-    UserDto createUser(UserDto dto);
+    User createUser(User user);
 
-    UserDto patchUser(UserDto dto);
+    User patchUser(User user);
 
     void deleteUser(Integer id);
 }
