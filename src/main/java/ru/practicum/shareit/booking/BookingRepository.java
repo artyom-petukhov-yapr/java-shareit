@@ -18,7 +18,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     // окончания срока аренды. Так комментарии будут честными."
     @Query("select count(b) > 0" +
             " from Booking b" +
-            " where b.booker.id = ?1 and b.item.id = ?2 and b.end < now() and b.status = 'APPROVED'")
+            " where b.booker.id = ?1 and b.item.id = ?2 and b.end < current_timestamp and b.status = 'APPROVED'")
     boolean canUserAddComment(Integer bookerId, Integer itemId);
 
     List<Booking> findAllByItemOwnerId(Integer ownerId);
@@ -36,7 +36,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
      */
     @Query("select b" +
             " from Booking b" +
-            " where b.item.id = ?1 and b.end < now()" +
+            " where b.item.id = ?1 and b.end < current_timestamp" +
             " order by b.end desc")
     Booking getLastBooking(Integer itemId);
 
@@ -45,7 +45,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
      */
     @Query("select b" +
         " from Booking b" +
-        " where b.item.id = ?1 and b.start > now()" +
+        " where b.item.id = ?1 and b.start > current_timestamp" +
         " order by b.start")
     Booking getNextBooking(Integer itemId);
 }
