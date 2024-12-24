@@ -8,48 +8,52 @@ import ru.practicum.shareit.exception.ValidationException;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
 
     @Override
-    public UserDto getUser(Integer id) {
-        return userMapper.mapToUserDto(userRepository.get(id));
+    public User getUser(Integer id) {
+        return userRepository.getReferenceById(id);
     }
 
     @Override
-    public UserDto createUser(UserDto dto) {
-        validateDto(dto, false);
-        User user = userRepository.add(userMapper.mapToUser(dto));
-        return userMapper.mapToUserDto(user);
+    public User createUser(User user) {
+        validateUser(user, false);
+        return userRepository.save(user);
     }
 
     @Override
-    public UserDto patchUser(UserDto dto) {
-        validateDto(dto, true);
-        User user = userRepository.patch(userMapper.mapToUser(dto));
-        return userMapper.mapToUserDto(user);
+    public User patchUser(User user) {
+        validateUser(user, true);
+        User repositoryUser = userRepository.getReferenceById(user.getId());
+        if (user.getEmail() != null && !user.getEmail().isBlank()) {
+            repositoryUser.setEmail(user.getEmail());
+        }
+        if (user.getName() != null && !user.getName().isBlank()) {
+            repositoryUser.setName(user.getName());
+        }
+        return userRepository.save(repositoryUser);
     }
 
     @Override
     public void deleteUser(Integer id) {
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 
-    private void validateDto(UserDto dto, boolean allowEmptyValues) {
+    private void validateUser(User user, boolean allowEmptyValues) {
         if (!allowEmptyValues) {
-            if (dto == null) {
+            if (user == null) {
                 throw new ValidationException("Информация о пользователе не может быть пустой");
             }
-            if (dto.getName() == null || dto.getName().isBlank()) {
-                throw new ValidationException(String.format("Имя пользователя (id=%d) не может быть пустым", dto.getId()));
+            if (user.getName() == null || user.getName().isBlank()) {
+                throw new ValidationException(String.format("Имя пользователя (id=%d) не может быть пустым", user.getId()));
             }
-            if (dto.getEmail() == null || dto.getEmail().isBlank()) {
-                throw new ValidationException(String.format("Email пользователя (id=%d) не может быть пустым", dto.getId()));
+            if (user.getEmail() == null || user.getEmail().isBlank()) {
+                throw new ValidationException(String.format("Email пользователя (id=%d) не может быть пустым", user.getId()));
             }
         }
 
         // в случае если поле email не пустое, то валидация значения
-        if (dto.getEmail() != null && !dto.getEmail().isBlank() && !dto.getEmail().contains("@")) {
-            throw new ValidationException(String.format("Email пользователя (id=%d) не удовлетворяет формату", dto.getId()));
+        if (user.getEmail() != null && !user.getEmail().isBlank() && !user.getEmail().contains("@")) {
+            throw new ValidationException(String.format("Email пользователя (id=%d) не удовлетворяет формату", user.getId()));
         }
     }
 }

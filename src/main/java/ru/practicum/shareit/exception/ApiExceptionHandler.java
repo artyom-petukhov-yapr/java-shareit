@@ -19,11 +19,6 @@ public class ApiExceptionHandler {
         return exceptionHandler(exception, HttpStatus.BAD_REQUEST, "Некорректные данные");
     }
 
-    @ExceptionHandler(RepositoryException.class)
-    public ResponseEntity<ErrorResponse> validationException(RepositoryException exception) {
-        return exceptionHandler(exception, HttpStatus.INTERNAL_SERVER_ERROR, "Некорректные данные");
-    }
-
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> runtimeException(RuntimeException exception) {
         return exceptionHandler(exception, HttpStatus.INTERNAL_SERVER_ERROR, "Внутренняя ошибка сервера");
